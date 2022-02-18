@@ -39,6 +39,7 @@ public class CreateOrderParametrizedTests {
     public void createOrderWithColors2() {
         Order order = Order.getRandom(color);
         Response response = orderClient.createOrder(order);
+
         assertEquals(201, response.getStatusCode());
     }
 }

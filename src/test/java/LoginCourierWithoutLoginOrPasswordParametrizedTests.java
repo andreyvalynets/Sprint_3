@@ -53,15 +53,14 @@ public class LoginCourierWithoutLoginOrPasswordParametrizedTests {
         Courier courier = new Courier(loginValid, passwordValid, "firstName");
         CourierCredentials courierCredentials = new CourierCredentials(login, password);
         Response createCourierResponse = courierClient.createCourier(courier);
-        assertEquals(201, createCourierResponse.getStatusCode());
-
         Response loginCourierWithoutLoginOrPasswordResponse = courierClient.loginAsCourier(courierCredentials);
+        Response loginCourierWithValidData = courierClient.loginAsCourier(courierCredentials.from(courier));
+        courierId = loginCourierWithValidData.getBody().path("id");
+
+        assertEquals(201, createCourierResponse.getStatusCode());
         assertEquals(400, loginCourierWithoutLoginOrPasswordResponse.getStatusCode());
         assertEquals("Недостаточно данных для входа", loginCourierWithoutLoginOrPasswordResponse.getBody().path("message"));
-
-        Response loginCourierWithValidData = courierClient.loginAsCourier(courierCredentials.from(courier));
         assertEquals(201, createCourierResponse.getStatusCode());
-        courierId = loginCourierWithValidData.getBody().path("id");
     }
 
 }

@@ -41,7 +41,7 @@ public class CreateCourierParametrizeTests {
         Courier courier = new Courier(login, password, "firstName");
         Response response = courierClient.createCourier(courier);
 
-        assertEquals("Courier is created without login", 400, response.getStatusCode());
+        assertEquals("Курьер создан без логина или пароля", 400, response.getStatusCode());
         assertEquals("Недостаточно данных для создания учетной записи", response.getBody().path("message"));
     }
 

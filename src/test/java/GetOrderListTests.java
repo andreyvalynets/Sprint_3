@@ -5,7 +5,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @DisplayName("Get orders")
 public class GetOrderListTests {
@@ -23,7 +24,7 @@ public class GetOrderListTests {
         Response response = orderClient.getOrders();
         List<Object> orders = response.getBody().path("orders");
 
-        assertEquals("Status Code is not as expected",200, response.getStatusCode());
-        assertNotNull("There is no orders", orders);
+        assertEquals("Статус код не как ожидаемый",200, response.getStatusCode());
+        assertNotNull("Заказы не найдены", orders);
     }
 }

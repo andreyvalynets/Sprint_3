@@ -11,6 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @DisplayName("Create courier")
 public class CreateCourierTests {
@@ -33,12 +34,12 @@ public class CreateCourierTests {
     public void courierCanBeCreatedWithValidData() {
         Courier courier = Courier.getRandom();
         Response response = courierClient.createCourier(courier);
-        assertEquals("Courier is not created", 201, response.getStatusCode());
-        assertEquals(true, response.getBody().path("ok"));
-
         Response loginResponse = courierClient.loginAsCourier(CourierCredentials.from(courier));
         courierId = loginResponse.getBody().path("id");
-        assertThat("Courier Id is not correct", courierId, is(not(0)));
+
+        assertEquals("Курьер не создан", 201, response.getStatusCode());
+        assertTrue(response.getBody().path("ok"));
+        assertThat("Невалидный CourierId", courierId, is(not(0)));
     }
 
 
@@ -48,13 +49,12 @@ public class CreateCourierTests {
         Courier courier = Courier.getRandom();
         Response firstCourierCreateResponse = courierClient.createCourier(courier);
         Response secondCourierCreateResponse = courierClient.createCourier(courier);
-
-        assertEquals("Courier is not created", 201, firstCourierCreateResponse.getStatusCode());
-        assertEquals("Identical Courier is created", 409, secondCourierCreateResponse.getStatusCode());
-        assertEquals("Этот логин уже используется", secondCourierCreateResponse.getBody().path("message"));
-
         Response loginResponse = courierClient.loginAsCourier(CourierCredentials.from(courier));
         courierId = loginResponse.getBody().path("id");
+
+        assertEquals("Курьер не создан", 201, firstCourierCreateResponse.getStatusCode());
+        assertEquals("Идентичный курьер создан", 409, secondCourierCreateResponse.getStatusCode());
+        assertEquals("Этот логин уже используется", secondCourierCreateResponse.getBody().path("message"));
     }
 
     @Test
@@ -64,11 +64,11 @@ public class CreateCourierTests {
         Courier courier = new Courier(name, "pass123", "Adam");
         Courier courier2 = new Courier(name, "qwer321", "Alex");
         Response firstResponse = courierClient.createCourier(courier);
-        assertEquals(201, firstResponse.getStatusCode());
         Response secondResponse = courierClient.createCourier(courier2);
 
-        assertEquals("Courier is created with existing login", 409, secondResponse.getStatusCode());
         Response loginResponse = courierClient.loginAsCourier(CourierCredentials.from(courier));
         courierId = loginResponse.getBody().path("id");
+        assertEquals(201, firstResponse.getStatusCode());
+        assertEquals("Курьер создан с существующим логином", 409, secondResponse.getStatusCode());
     }
 }

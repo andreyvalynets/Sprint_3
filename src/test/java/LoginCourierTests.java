@@ -25,6 +25,6 @@ public class LoginCourierTests {
         CourierCredentials courierCredentials = new CourierCredentials(name, password);
         Response loginResponse = courierClient.loginAsCourier(courierCredentials);
 
-        assertEquals("Courier is logged with invalid data", 404, loginResponse.getStatusCode());
+        assertEquals("Курьер вошел в систему под невалидными данными", 404, loginResponse.getStatusCode());
     }
 }
