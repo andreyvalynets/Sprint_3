@@ -54,6 +54,7 @@ public class CreateCourierTests {
 
         assertEquals("Курьер не создан", 201, firstCourierCreateResponse.getStatusCode());
         assertEquals("Идентичный курьер создан", 409, secondCourierCreateResponse.getStatusCode());
+        assertEquals("Этот логин уже используется", secondCourierCreateResponse.getBody().path("message"));
     }
 
     @Test
